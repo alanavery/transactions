@@ -1,4 +1,4 @@
-export const fruits = [
+const fruits = [
   {
     name: 'apples',
     quantity: 10,
@@ -20,3 +20,5 @@ export const fruits = [
     price: '$3.50',
   },
 ];
+
+module.exports = fruits;
