@@ -38,10 +38,10 @@ const transactionSchema = new mongoose.Schema({
 });
 
 const accountSchema = new mongoose.Schema({
-  user: [{
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }],
+  },
   name: {
     type: String,
     required: true

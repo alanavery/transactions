@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 
-const fruits = require('./testData');
+// const fruits = require('./testData');
 const User = require('./models/user');
+const Account = require('./models/account');
 
 // Mongoose ——————————————————————————————
 
@@ -37,10 +38,6 @@ app.get('/', (req, res) => {
   res.send('Hello.');
 });
 
-app.get('/fruits', (req, res) => {
-  res.send(fruits);
-});
-
 app.post('/users', (req, res) => {
   const newUser = new User({
     first_name: req.body.firstName,
@@ -62,6 +59,30 @@ app.get('/users', (req, res) => {
       res.send(`Unable to find users.\n${err}`);
     } else {
       res.send(users);
+    }
+  });
+});
+
+app.post('/users/:userId/accounts', (req, res) => {
+  User.exists({ _id: req.params.userId }, (err, result) => {
+    if (err) {
+      res.send(`Unable to find user.\n${err}`);
+    } else {
+      if (result) {
+        const newAccount = new Account({
+          user: req.params.userId,
+          name: req.body.name,
+          balance: req.body.balance,
+          credit: req.body.credit
+        });
+        newAccount.save((err, account) => {
+          if (err) {
+            res.send(`A new account has NOT been added to the database.\n${err}`);
+          } else {
+            res.send(`A new account has been added to the database.\n${account}`);
+          }
+        });
+      }
     }
   });
 });
