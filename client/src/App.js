@@ -1,85 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-// import { fruits } from './testData';
-
+import NewUserForm from './components/NewUserForm';
 import NewTransactionForm from './components/NewTransactionForm';
 import TransactionTable from './components/TransactionTable';
-import NewUserForm from './components/NewUserForm';
 
 function App() {
-  const [testData, setTestData] = useState([]);
-  const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState(0);
-  const [price, setPrice] = useState('');
+  const [users, setUsers] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newFruit = {
-      name: name,
-      quantity: Number(quantity),
-      price: price,
-    };
-    setTestData(testData.concat(newFruit));
-  };
+  useEffect(() => {
+    updateUsers();
+  }, []);
 
-  const handleClick = () => {
-    axios.get('http://localhost:8000/fruits').then((res) => {
-      setTestData(res.data);
-    });
-  };
-
-  const createUser = (event) => {
-    event.preventDefault();
-    axios
-      .post('http://localhost:8000/users', {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-      })
+  const updateUsers = () => {
+    axios.get('http://localhost:8000/users')
       .then((res) => {
-        alert(res.data);
+        console.log(res.data);
+        setUsers(res.data);
       })
       .catch((err) => {
         alert(err);
       });
   };
 
+  const listUsers = users.map((user, i) => {
+    return (
+      <li key={user._id}>
+        <a href="" onClick={(event) => event.preventDefault()}>
+          {user.first_name} {user.last_name}
+        </a>
+      </li>
+    );
+  });
+
+  const addUser = (event) => {
+    event.preventDefault();
+    axios.post('http://localhost:8000/users', {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+    }).then((res) => {
+      alert(res.data);
+      updateUsers();
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+    }).catch((err) => {
+      alert(err);
+    });
+  };
+
   return (
     <div className="container">
-      {/* <NewTransactionForm name={name} setName={setName} quantity={quantity} setQuantity={setQuantity} price={price} setPrice={setPrice} handleSubmit={handleSubmit} /> */}
       <div className="forms">
-        <NewUserForm 
-        firstName={firstName} 
-        setFirstName={setFirstName} 
-        lastName={lastName} 
-        setLastName={setLastName} 
-        email={email} 
-        setEmail={setEmail} 
-        createUser={createUser} 
+        <h2>Users</h2>
+        <ul>{listUsers}</ul>
+
+        <h2>Add User</h2>
+        <NewUserForm
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
+          email={email}
+          setEmail={setEmail}
+          addUser={addUser}
         />
       </div>
-      <TransactionTable testData={testData} />
-      {/* <div>
-        <button onClick={handleClick}>Send Request</button>
-        <p id="text-response"></p>
-      </div> */}
+
+      {/* <TransactionTable testData={testData} /> */}
     </div>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
   );
 }
 

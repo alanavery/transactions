@@ -1,6 +1,6 @@
 function NewUserForm(props) {
   return (
-    <form onSubmit={props.createUser}>
+    <form onSubmit={props.addUser}>
       <label htmlFor="first-name">First Name</label>
       <input
         id="first-name"
