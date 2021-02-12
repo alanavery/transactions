@@ -1,10 +1,5 @@
 const mongoose = require('mongoose');
 
-const User = require('./user');
-const Payee = require('./payee');
-const Payer = require('./payer');
-const Tag = require('./tag');
-
 const transactionSchema = new mongoose.Schema({
   type: {
     type: String,
@@ -15,14 +10,14 @@ const transactionSchema = new mongoose.Schema({
     required: true,
     max: 1000000
   },
-  payee: [{
+  payee: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payee'
-  }],
-  payer: [{
+  },
+  payer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payer'
-  }],
+  },
   date: {
     type: Date,
     default: Date.now

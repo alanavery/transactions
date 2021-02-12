@@ -3,11 +3,13 @@ import axios from 'axios';
 import './App.css';
 
 import NewUserForm from './components/NewUserForm';
+import NewAccountForm from './components/NewAccountForm';
 import NewTransactionForm from './components/NewTransactionForm';
 import TransactionTable from './components/TransactionTable';
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,21 +18,23 @@ function App() {
     updateUsers();
   }, []);
 
-  const updateUsers = () => {
-    axios.get('http://localhost:8000/users')
-      .then((res) => {
-        console.log(res.data);
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        alert(err);
-      });
+  const updateUsers = async () => {
+    try {
+      const res = await axios.get('http://localhost:8000/users');
+      console.log(res.data);
+      setUsers(res.data);
+    } catch (err) {
+      alert(err);
+    }
   };
 
-  const listUsers = users.map((user, i) => {
+  const listUsers = users.map((user) => {
     return (
       <li key={user._id}>
-        <a href="" onClick={(event) => event.preventDefault()}>
+        <a href="" onClick={(event) => {
+          event.preventDefault();
+          setCurrentUser(user);
+        }}>
           {user.first_name} {user.last_name}
         </a>
       </li>
@@ -42,7 +46,7 @@ function App() {
     axios.post('http://localhost:8000/users', {
       firstName: firstName,
       lastName: lastName,
-      email: email,
+      email: email
     }).then((res) => {
       alert(res.data);
       updateUsers();
@@ -70,8 +74,11 @@ function App() {
           setEmail={setEmail}
           addUser={addUser}
         />
-      </div>
 
+        <h2>Add Account</h2>
+        <NewAccountForm currentUserId={currentUser._id} />
+      </div>
+      <h1>{currentUser.first_name}'s Account</h1>
       {/* <TransactionTable testData={testData} /> */}
     </div>
   );
