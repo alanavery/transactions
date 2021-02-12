@@ -15,6 +15,7 @@ function NewAccountForm(props) {
         credit: credit
       });
       alert(res.data);
+      props.updateAccounts();
       setName('');
       setBalance(0);
       setCredit(false);

@@ -11,15 +11,18 @@ function App() {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState();
   const [accounts, setAccounts] = useState([]);
+  const [currentAccount, setCurrentAccount] = useState();
 
   useEffect(() => {
     updateUsers();
-  }, []);
+    if (currentUser) {
+      updateAccounts();
+    }
+  }, [currentUser]);
 
   const updateUsers = async () => {
     try {
       const res = await axios.get('http://localhost:8000/users');
-      console.log(res.data);
       setUsers(res.data);
     } catch (err) {
       alert(err);
@@ -41,26 +44,25 @@ function App() {
 
   const updateAccounts = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/users/${currentUser._id}/`);
-      console.log(res.data);
-      setUsers(res.data);
+      const res = await axios.get(`http://localhost:8000/users/${currentUser._id}/accounts`);
+      setAccounts(res.data);
     } catch (err) {
       alert(err);
     }
   };
 
-  // const listUsers = users.map((user) => {
-  //   return (
-  //     <li key={user._id}>
-  //       <a href="" onClick={(event) => {
-  //         event.preventDefault();
-  //         setCurrentUser(user);
-  //       }}>
-  //         {user.first_name} {user.last_name}
-  //       </a>
-  //     </li>
-  //   );
-  // });
+  const listAccounts = accounts.map((account) => {
+    return (
+      <li key={account._id}>
+        <a href="" onClick={(event) => {
+          event.preventDefault();
+          setCurrentAccount(account);
+        }}>
+          {account.name}
+        </a>
+      </li>
+    );
+  });
 
   return (
     <div className="container">
@@ -73,7 +75,13 @@ function App() {
 
         {currentUser && <div>
           <h2>Add Account</h2>
-          <NewAccountForm currentUserId={currentUser._id} />
+          <NewAccountForm
+            currentUserId={currentUser._id}
+            updateAccounts={updateAccounts}
+          />
+
+          <h2>Accounts</h2>
+          <ul>{listAccounts}</ul>
         </div>}
       </div>
 
