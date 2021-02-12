@@ -87,6 +87,16 @@ app.post('/users/:userId/accounts', (req, res) => {
   });
 });
 
+app.get('/users/:userId/accounts', (req, res) => {
+  Account.find({ user: req.params.userId }, (err, accounts) => {
+    if (err) {
+      res.send(`Unable to find accounts.\n${err}`);
+    } else {
+      res.send(accounts);
+    }
+  });
+});
+
 // Listen for requests ——————————————————————————————
 
 const port = process.env.PORT || 8000;
