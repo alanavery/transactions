@@ -39,7 +39,6 @@ app.use((req, res, next) => {
 // Routers ——————————————————————————————
 
 const usersRouter = require('./routers/users');
-
 app.use('/users', usersRouter);
 
 // app.post('/users/:userId/accounts/:accountId/transactions', (req, res) => {

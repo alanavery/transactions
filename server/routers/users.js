@@ -1,9 +1,13 @@
 const express = require('express');
 
 const User = require('../models/user');
-const Account = require('../models/account');
+
+// Routers ——————————————————————————————
 
 const usersRouter = express.Router();
+
+const accountsRouter = require('./accounts');
+usersRouter.use('/:userId/accounts', accountsRouter);
 
 // Middleware ——————————————————————————————
 
@@ -45,27 +49,6 @@ usersRouter.post('/', (req, res) => {
       res.status(500).send(err);
     } else {
       res.status(201).send(newUser);
-    }
-  });
-});
-
-usersRouter.get('/:userId/accounts', (req, res) => {
-  res.send(req.user.accounts);
-});
-
-usersRouter.post('/:userId/accounts', (req, res) => {
-  const newAccount = {
-    name: req.body.name,
-    balance: req.body.balance,
-    credit: req.body.credit
-  };
-  const updatedAccounts = req.user.accounts.concat(newAccount);
-  User.updateOne({ _id: req.user._id }, { accounts: updatedAccounts }, (err, user) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(user);
     }
   });
 });
