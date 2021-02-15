@@ -6,6 +6,21 @@ const User = require('../models/user');
 
 const accountsRouter = express.Router({ mergeParams: true });
 
+const transactionsRouter = require('./transactions');
+accountsRouter.use('/:accountId/transactions', transactionsRouter);
+
+// Middleware ——————————————————————————————
+
+accountsRouter.param('accountId', (req, res, next, id) => {
+  const account = req.user.accounts.id(id);
+  if (account) {
+    req.account = account;
+    next();
+  } else {
+    res.status(404).send('The account cannot be found.');
+  }
+});
+
 // Routes ——————————————————————————————
 
 accountsRouter.get('/', (req, res) => {
