@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 
 const User = require('./models/user');
 const Account = require('./models/account');
@@ -25,6 +26,7 @@ db.once('open', () => console.log(`Connected to database at ${db.host}:${db.port
 // Middleware ——————————————————————————————
 
 app.use(express.json());
+app.use(morgan('dev'));
 
 // Response headers ——————————————————————————————
 
@@ -34,136 +36,69 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes ——————————————————————————————
+// Routers ——————————————————————————————
 
-app.post('/users', (req, res) => {
-  const newUser = new User({
-    first_name: req.body.firstName,
-    last_name: req.body.lastName,
-    email: req.body.email
-  });
-  newUser.save((err) => {
-    if (err) {
-      res.send(`A new user has NOT been added to the database.\n${err}`);
-    } else {
-      res.send('A new user has been added to the database.');
-    }
-  });
-});
+const usersRouter = require('./routers/users');
 
-app.get('/users', (req, res) => {
-  User.find({}, (err, users) => {
-    if (err) {
-      res.send(`There was an error searching the database.\n${err}`);
-    } else {
-      res.send(users);
-    }
-  });
-});
+app.use('/users', usersRouter);
 
-app.post('/users/:userId/accounts', (req, res) => {
-  User.exists({ _id: req.params.userId }, (err, result) => {
-    if (err) {
-      res.send(`There was an error searching the database.\n${err}`);
-    } else {
-      if (result) {
-        const newAccount = new Account({
-          user: req.params.userId,
-          name: req.body.name,
-          balance: req.body.balance,
-          credit: req.body.credit
-        });
-        newAccount.save((err, account) => {
-          if (err) {
-            res.send(`A new account has NOT been added to the database.\n${err}`);
-          } else {
-            res.send(`A new account has been added to the database.\n${account}`);
-          }
-        });
-      } else {
-        res.send('The user doesn\'t exist.');
-      }
-    }
-  });
-});
+// app.post('/users/:userId/accounts/:accountId/transactions', (req, res) => {
+//   User.exists({ _id: req.params.userId }, (err, result) => {
+//     if (err) {
+//       res.send(`There was an error searching the database.\n${err}`);
+//     } else {
+//       if (result) {
+//         Account.findOne({ _id: req.params.accountId }, async (err, account) => {
+//           if (err) {
+//             res.send(`There was an error searching the database.\n${err}`);
+//           } else {
+//             if (account === null) {
+//               res.send('The account doesn\'t exist.');
+//             } else {
+//               const newTransaction = {
+//                 type: req.body.type,
+//                 amount: req.body.amount,
+//                 date: req.body.date,
+//                 cleared: req.body.cleared
+//               };
+//               if (req.body.payee) {
+//                 await Payee.findOne({ name: req.body.payee }, (err, result) => {
+//                   if (err) {
+//                     res.send(`There was an error searching the database.\n${err}`);
+//                   } else {
+//                     if (result === null) {
+//                       Payee.create({ name: req.body.payee }, (err, payee) => {
+//                         if (err) {
+//                           res.send(`There was an error searching the database.\n${err}`);
+//                         } else {
+//                           newTransaction.payee = payee._id;
+//                         }
+//                       });
+//                     } else {
+//                       newTransaction.payee = result._id;
+//                     }
+//                   }
+//                 });
+//               }
+//               const transactions = account.transactions;
+//               transactions.push(newTransaction);
+//               Account.findOneAndUpdate({ _id: req.params.accountId }, { transactions: transactions }, (err, account) => {
+//                 if (err) {
+//                   res.send(`There was an error searching the database.\n${err}`);
+//                 } else {
+//                   res.send(account);
+//                 }
+//               });
 
-app.get('/users/:userId/accounts', (req, res) => {
-  User.exists({ _id: req.params.userId }, (err, result) => {
-    if (err) {
-      res.send(`There was an error searching the database.\n${err}`);
-    } else {
-      if (result) {
-        Account.find({ user: req.params.userId }, (err, accounts) => {
-          if (err) {
-            res.send(`There was an error searching the database.\n${err}`);
-          } else {
-            res.send(accounts);
-          }
-        });
-      } else {
-        res.send('The user doesn\'t exist.');
-      }
-    }
-  });
-});
-
-app.post('/users/:userId/accounts/:accountId/transactions', (req, res) => {
-  User.exists({ _id: req.params.userId }, (err, result) => {
-    if (err) {
-      res.send(`There was an error searching the database.\n${err}`);
-    } else {
-      if (result) {
-        Account.findOne({ _id: req.params.accountId }, async (err, account) => {
-          if (err) {
-            res.send(`There was an error searching the database.\n${err}`);
-          } else {
-            if (account === null) {
-              res.send('The account doesn\'t exist.');
-            } else {
-              const newTransaction = {
-                type: req.body.type,
-                amount: req.body.amount,
-                date: req.body.date,
-                cleared: req.body.cleared
-              };
-              if (req.body.payee) {
-                await Payee.findOne({ name: req.body.payee }, (err, result) => {
-                  if (err) {
-                    res.send(`There was an error searching the database.\n${err}`);
-                  } else {
-                    if (result === null) {
-                      Payee.create({ name: req.body.payee }, (err, payee) => {
-                        if (err) {
-                          res.send(`There was an error searching the database.\n${err}`);
-                        } else {
-                          newTransaction.payee = payee._id;
-                        }
-                      });
-                    } else {
-                      newTransaction.payee = result._id;
-                    }
-                  }
-                });
-              }
-              const transactions = account.transactions;
-              transactions.push(newTransaction);
-              Account.findOneAndUpdate({ _id: req.params.accountId }, { transactions: transactions }, (err, account) => {
-                if (err) {
-                  res.send(`There was an error searching the database.\n${err}`);
-                } else {
-                  res.send(account);
-                }
-              });
-
-            }
-          }
-        });
-      } else {
-        res.send('The user doesn\'t exist.');
-      }
-    }
-  });
-});
+//             }
+//           }
+//         });
+//       } else {
+//         res.send('The user doesn\'t exist.');
+//       }
+//     }
+//   });
+// });
 
 // Listen for requests ——————————————————————————————
 

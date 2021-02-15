@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const accountSchema = require('./account');
+
 const userSchema = new mongoose.Schema({
   first_name: {
     type: String,
@@ -14,7 +16,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     lowercase: true
-  }
+  },
+  accounts: [accountSchema],
 });
 
 const User = mongoose.model('User', userSchema);
