@@ -2,9 +2,17 @@ import TransactionRows from './TransactionRows';
 
 function TransactionTable(props) {
   return (
-    <table>
+    <table className="transactions-table">
+      <thead>
+        <tr>
+          <th>Amount</th>
+          <th>Payee/Payer</th>
+          <th>Date</th>
+          <th>Cleared</th>
+        </tr>
+      </thead>
       <tbody>
-        <TransactionRows testData={props.testData} />
+        <TransactionRows transactions={props.transactions} />
       </tbody>
     </table>
   );

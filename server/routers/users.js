@@ -29,7 +29,13 @@ usersRouter.use('/:userId/accounts', accountsRouter);
 // Routes ——————————————————————————————
 
 usersRouter.get('/', (req, res) => {
-  User.find({}, (err, users) => {
+  User.find().populate({
+    path: 'accounts',
+    populate: {
+      path: 'transactions',
+      populate: { path: 'payee' }
+    }
+  }).exec((err, users) => {
     if (err) {
       res.status(500).send(err);
     } else {

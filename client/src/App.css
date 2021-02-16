@@ -16,3 +16,15 @@ body {
 input {
   display: block;
 }
+
+.transactions-table {
+  width: 100%;
+}
+
+.debit {
+  color: #ff0000;
+}
+
+.credit {
+  color: #008000;
+}

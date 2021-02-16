@@ -9,16 +9,14 @@ import TransactionTable from './components/TransactionTable';
 
 function App() {
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState({});
   const [accounts, setAccounts] = useState([]);
-  const [currentAccount, setCurrentAccount] = useState();
+  const [currentAccount, setCurrentAccount] = useState({});
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     updateUsers();
-    if (currentUser) {
-      updateAccounts();
-    }
-  }, [currentUser]);
+  }, []);
 
   const updateUsers = async () => {
     try {
@@ -35,6 +33,7 @@ function App() {
         <a href="" onClick={(event) => {
           event.preventDefault();
           setCurrentUser(user);
+          setAccounts(user.accounts);
         }}>
           {user.first_name} {user.last_name}
         </a>
@@ -42,21 +41,13 @@ function App() {
     );
   });
 
-  const updateAccounts = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8000/users/${currentUser._id}/accounts`);
-      setAccounts(res.data);
-    } catch (err) {
-      alert(err);
-    }
-  };
-
   const listAccounts = accounts.map((account) => {
     return (
       <li key={account._id}>
         <a href="" onClick={(event) => {
           event.preventDefault();
           setCurrentAccount(account);
+          setTransactions(account.transactions);
         }}>
           {account.name}
         </a>
@@ -67,26 +58,29 @@ function App() {
   return (
     <div className="container">
       <div className="forms">
-        <h2>Add User</h2>
+        <h3>Add User</h3>
         <NewUserForm updateUsers={updateUsers} />
 
-        <h2>Users</h2>
+        <h3>Users</h3>
         <ul>{listUsers}</ul>
 
-        {currentUser && <div>
-          <h2>Add Account</h2>
+        {Object.entries(currentUser).length > 0 && <div>
+          <h3>Add Account</h3>
           <NewAccountForm
             currentUserId={currentUser._id}
-            updateAccounts={updateAccounts}
+            updateUsers={updateUsers}
           />
 
-          <h2>Accounts</h2>
+          <h3>Accounts</h3>
           <ul>{listAccounts}</ul>
         </div>}
       </div>
 
-      {currentUser && <h1>{currentUser.first_name}'s Account</h1>}
-      {/* <TransactionTable testData={testData} /> */}
+      <div className="account-info">
+        {Object.entries(currentUser).length > 0 && <h1>{currentUser.first_name}'s Account</h1>}
+        {Object.entries(currentAccount).length > 0 && <h2>{currentAccount.name}</h2>}
+        <TransactionTable transactions={transactions} />
+      </div>
     </div>
   );
 }
