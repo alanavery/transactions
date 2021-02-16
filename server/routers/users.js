@@ -2,12 +2,7 @@ const express = require('express');
 
 const User = require('../models/user');
 
-// Routers ——————————————————————————————
-
 const usersRouter = express.Router();
-
-const accountsRouter = require('./accounts');
-usersRouter.use('/:userId/accounts', accountsRouter);
 
 // Middleware ——————————————————————————————
 
@@ -25,6 +20,11 @@ usersRouter.param('userId', (req, res, next, id) => {
     }
   });
 });
+
+// Router ——————————————————————————————
+
+const accountsRouter = require('./accounts');
+usersRouter.use('/:userId/accounts', accountsRouter);
 
 // Routes ——————————————————————————————
 
@@ -44,11 +44,11 @@ usersRouter.post('/', (req, res) => {
     last_name: req.body.lastName,
     email: req.body.email
   });
-  newUser.save((err) => {
+  newUser.save((err, createdUser) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.status(201).send(newUser);
+      res.status(201).send(createdUser);
     }
   });
 });

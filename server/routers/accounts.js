@@ -1,13 +1,6 @@
 const express = require('express');
 
-const User = require('../models/user');
-
-// Routers ——————————————————————————————
-
 const accountsRouter = express.Router({ mergeParams: true });
-
-const transactionsRouter = require('./transactions');
-accountsRouter.use('/:accountId/transactions', transactionsRouter);
 
 // Middleware ——————————————————————————————
 
@@ -21,6 +14,11 @@ accountsRouter.param('accountId', (req, res, next, id) => {
   }
 });
 
+// Router ——————————————————————————————
+
+const transactionsRouter = require('./transactions');
+accountsRouter.use('/:accountId/transactions', transactionsRouter);
+
 // Routes ——————————————————————————————
 
 accountsRouter.get('/', (req, res) => {
@@ -33,13 +31,13 @@ accountsRouter.post('/', (req, res) => {
     balance: req.body.balance,
     credit: req.body.credit
   };
-  const updatedAccounts = req.user.accounts.concat(newAccount);
-  User.updateOne({ _id: req.user._id }, { accounts: updatedAccounts }, (err) => {
+  req.user.accounts.push(newAccount);
+  req.user.save((err, updatedUser) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
     } else {
-      res.status(201).send(newAccount);
+      res.status(201).send(updatedUser);
     }
   });
 });
