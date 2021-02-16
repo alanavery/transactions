@@ -30,10 +30,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Router ——————————————————————————————
+// Routers ——————————————————————————————
 
 const usersRouter = require('./routers/users');
 app.use('/users', usersRouter);
+
+const payeesRouter = require('./routers/payees');
+app.use('/payees', payeesRouter);
 
 // Listen for requests ——————————————————————————————
 
