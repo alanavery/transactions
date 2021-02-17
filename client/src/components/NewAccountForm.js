@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function NewAccountForm(props) {
   const [name, setName] = useState('');
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState('');
   const [credit, setCredit] = useState(false);
 
   const addAccount = async (event) => {
@@ -14,12 +14,11 @@ function NewAccountForm(props) {
         balance: balance,
         credit: credit
       });
-      alert(res.data);
+      alert('Account added.');
       props.updateUsers();
       setName('');
-      setBalance(0);
+      setBalance('');
       setCredit(false);
-      document.getElementById('credit').checked = false;
     } catch (err) {
       alert(err);
     }
@@ -27,26 +26,30 @@ function NewAccountForm(props) {
 
   return (
     <form onSubmit={addAccount}>
-      <label htmlFor="name">Name</label>
+      <label htmlFor="account-name">Name</label>
       <input
-        id="name"
+        id="account-name"
         type="text"
         value={name}
         onChange={(event) => setName(event.target.value)}
       />
-      <label htmlFor="balance">Balance</label>
+
+      <label htmlFor="account-balance">Balance</label>
       <input
-        id="balance"
+        id="account-balance"
         type="number"
         value={balance}
         onChange={(event) => setBalance(event.target.value)}
       />
-      <label htmlFor="credit">Credit</label>
+
+      <label htmlFor="account-credit">Credit</label>
       <input
-        id="credit"
+        id="account-credit"
         type="checkbox"
+        checked={credit}
         onChange={(event) => event.target.checked ? setCredit(true) : setCredit(false)}
       />
+
       <input type="submit" value="Submit" />
     </form>
   );

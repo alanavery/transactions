@@ -5,18 +5,32 @@ import './App.css';
 import NewUserForm from './components/NewUserForm';
 import NewAccountForm from './components/NewAccountForm';
 import NewTransactionForm from './components/NewTransactionForm';
+import UsersList from './components/UsersList';
+import AccountsList from './components/AccountsList';
 import TransactionTable from './components/TransactionTable';
 
 function App() {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
-  const [accounts, setAccounts] = useState([]);
   const [currentAccount, setCurrentAccount] = useState({});
-  const [transactions, setTransactions] = useState([]);
+  const [payees, setPayees] = useState([]);
 
   useEffect(() => {
     updateUsers();
+    updatePayees();
   }, []);
+
+  useEffect(() => {
+    if (currentUser._id) {
+      setCurrentUser(users.find((user) => user._id === currentUser._id));
+    }
+  }, [users]);
+
+  useEffect(() => {
+    if (currentAccount._id) {
+      setCurrentAccount(currentUser.accounts.find((account) => account._id === currentAccount._id));
+    }
+  }, [currentUser]);
 
   const updateUsers = async () => {
     try {
@@ -27,33 +41,14 @@ function App() {
     }
   };
 
-  const listUsers = users.map((user) => {
-    return (
-      <li key={user._id}>
-        <a href="" onClick={(event) => {
-          event.preventDefault();
-          setCurrentUser(user);
-          setAccounts(user.accounts);
-        }}>
-          {user.first_name} {user.last_name}
-        </a>
-      </li>
-    );
-  });
-
-  const listAccounts = accounts.map((account) => {
-    return (
-      <li key={account._id}>
-        <a href="" onClick={(event) => {
-          event.preventDefault();
-          setCurrentAccount(account);
-          setTransactions(account.transactions);
-        }}>
-          {account.name}
-        </a>
-      </li>
-    );
-  });
+  const updatePayees = async () => {
+    try {
+      const res = await axios.get('http://localhost:8000/payees');
+      setPayees(res.data);
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   return (
     <div className="container">
@@ -62,9 +57,12 @@ function App() {
         <NewUserForm updateUsers={updateUsers} />
 
         <h3>Users</h3>
-        <ul>{listUsers}</ul>
+        <UsersList
+          users={users}
+          setCurrentUser={setCurrentUser}
+        />
 
-        {Object.entries(currentUser).length > 0 && <div>
+        {currentUser._id && <div>
           <h3>Add Account</h3>
           <NewAccountForm
             currentUserId={currentUser._id}
@@ -72,14 +70,29 @@ function App() {
           />
 
           <h3>Accounts</h3>
-          <ul>{listAccounts}</ul>
+          <AccountsList
+            accounts={currentUser.accounts}
+            setCurrentAccount={setCurrentAccount}
+          />
+        </div>}
+
+        {currentAccount._id && <div>
+          <h3>Add Transaction</h3>
+          <NewTransactionForm
+            currentUserId={currentUser._id}
+            currentAccountId={currentAccount._id}
+            updateUsers={updateUsers}
+            payees={payees}
+          />
         </div>}
       </div>
 
       <div className="account-info">
-        {Object.entries(currentUser).length > 0 && <h1>{currentUser.first_name}'s Account</h1>}
-        {Object.entries(currentAccount).length > 0 && <h2>{currentAccount.name}</h2>}
-        <TransactionTable transactions={transactions} />
+        {currentUser._id && <h1>{currentUser.first_name}'s Account</h1>}
+        {currentAccount._id && <div>
+          <h2>{currentAccount.name}</h2>
+          <TransactionTable transactions={currentAccount.transactions} />
+        </div>}
       </div>
     </div>
   );

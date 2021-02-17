@@ -14,7 +14,7 @@ function NewUserForm(props) {
         lastName: lastName,
         email: email
       });
-      alert(res.data);
+      alert('User added.');
       props.updateUsers();
       setFirstName('');
       setLastName('');
@@ -26,27 +26,30 @@ function NewUserForm(props) {
 
   return (
     <form onSubmit={addUser}>
-      <label htmlFor="first-name">First Name</label>
+      <label htmlFor="user-first-name">First Name</label>
       <input
-        id="first-name"
+        id="user-first-name"
         type="text"
         value={firstName}
         onChange={(event) => setFirstName(event.target.value)}
       />
-      <label htmlFor="last-name">Last Name</label>
+
+      <label htmlFor="user-last-name">Last Name</label>
       <input
-        id="last-name"
+        id="user-last-name"
         type="text"
         value={lastName}
         onChange={(event) => setLastName(event.target.value)}
       />
-      <label htmlFor="email">Email</label>
+
+      <label htmlFor="user-email">Email</label>
       <input
-        id="email"
+        id="user-email"
         type="email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
       />
+
       <input type="submit" value="Submit" />
     </form>
   );
