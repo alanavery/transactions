@@ -50,6 +50,24 @@ function App() {
     }
   };
 
+  const calculateBalance = (cleared) => {
+    let balance = currentAccount.balance;
+    let transactions;
+    if (cleared) {
+      transactions = currentAccount.transactions.filter((transaction) => transaction.cleared);
+    } else {
+      transactions = currentAccount.transactions;
+    }
+    transactions.forEach((transaction) => {
+      if (transaction.type === 'debit') {
+        balance -= transaction.amount;
+      } else if (transaction.type === 'credit') {
+        balance += transaction.amount;
+      }
+    });
+    return balance;
+  };
+
   return (
     <div className="container">
       <div className="forms">
@@ -91,6 +109,9 @@ function App() {
         {currentUser._id && <h1>{currentUser.first_name}'s Account</h1>}
         {currentAccount._id && <div>
           <h2>{currentAccount.name}</h2>
+          <p>Starting Balance: {currentAccount.balance}</p>
+          <p>Cleared: {calculateBalance(true)}</p>
+          <p>Uncleared: {calculateBalance(false)}</p>
           <TransactionTable transactions={currentAccount.transactions} />
         </div>}
       </div>
