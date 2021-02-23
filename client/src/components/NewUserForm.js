@@ -1,53 +1,58 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export const NewUserForm = (props) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+const blankUserForm = {
+  firstName: '',
+  lastName: '',
+  email: ''
+};
 
-  const addUser = async (event) => {
+export const NewUserForm = (props) => {
+  const [form, setForm] = useState(blankUserForm);
+
+  const handleChange = ({ target }) => {
+    setForm((current) => ({ ...current, [target.name]: target.value }));
+  };
+
+  const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await axios.post('http://localhost:8000/users', {
-        firstName: firstName,
-        lastName: lastName,
-        email: email
-      });
+      const res = await axios.post('http://localhost:8000/users', form);
       alert('User added.');
       props.updateUsers();
-      setFirstName('');
-      setLastName('');
-      setEmail('');
+      setForm(blankUserForm);
     } catch (err) {
       alert(err);
     }
   };
 
   return (
-    <form onSubmit={addUser}>
+    <form onSubmit={handleSubmit}>
       <label htmlFor="user-first-name">First Name</label>
       <input
         id="user-first-name"
+        name="firstName"
         type="text"
-        value={firstName}
-        onChange={(event) => setFirstName(event.target.value)}
+        value={form.firstName}
+        onChange={handleChange}
       />
 
       <label htmlFor="user-last-name">Last Name</label>
       <input
         id="user-last-name"
+        name="lastName"
         type="text"
-        value={lastName}
-        onChange={(event) => setLastName(event.target.value)}
+        value={form.lastName}
+        onChange={handleChange}
       />
 
       <label htmlFor="user-email">Email</label>
       <input
         id="user-email"
+        name="email"
         type="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
+        value={form.email}
+        onChange={handleChange}
       />
 
       <input type="submit" value="Submit" />

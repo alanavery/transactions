@@ -1,53 +1,59 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export const NewAccountForm = (props) => {
-  const [name, setName] = useState('');
-  const [balance, setBalance] = useState('');
-  const [credit, setCredit] = useState(false);
+const blankAccountForm = {
+  name: '',
+  balance: '',
+  credit: false
+};
 
-  const addAccount = async (event) => {
+export const NewAccountForm = (props) => {
+  const [form, setForm] = useState(blankAccountForm);
+
+  const handleChange = ({ target }) => {
+    const value = target.name === 'credit' ? target.checked : target.value;
+    setForm((current) => ({ ...current, [target.name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await axios.post(`http://localhost:8000/users/${props.currentUserId}/accounts`, {
-        name: name,
-        balance: balance,
-        credit: credit
-      });
+      const res = await axios.post(`http://localhost:8000/users/${props.currentUserId}/accounts`, form);
       alert('Account added.');
       props.updateUsers();
-      setName('');
-      setBalance('');
-      setCredit(false);
+      setForm(blankAccountForm);
     } catch (err) {
       alert(err);
     }
   };
 
   return (
-    <form onSubmit={addAccount}>
+    <form onSubmit={handleSubmit}>
       <label htmlFor="account-name">Name</label>
       <input
         id="account-name"
+        name="name"
         type="text"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
+        value={form.name}
+        onChange={handleChange}
       />
 
       <label htmlFor="account-balance">Balance</label>
       <input
         id="account-balance"
+        name="balance"
         type="number"
-        value={balance}
-        onChange={(event) => setBalance(event.target.value)}
+        value={form.balance}
+        onChange={handleChange}
       />
 
       <label htmlFor="account-credit">Credit</label>
       <input
         id="account-credit"
+        name="credit"
         type="checkbox"
-        checked={credit}
-        onChange={(event) => event.target.checked ? setCredit(true) : setCredit(false)}
+        checked={form.credit}
+        onChange={handleChange}
       />
 
       <input type="submit" value="Submit" />
