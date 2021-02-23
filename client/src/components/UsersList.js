@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UsersList(props) {
+export const UsersList = (props) => {
   const listItems = props.users.map((user) => {
     return (
       <li key={user._id}>
@@ -17,7 +17,4 @@ function UsersList(props) {
   return (
     <ul>{listItems}</ul>
   );
-}
-
-
-export default UsersList;
+};

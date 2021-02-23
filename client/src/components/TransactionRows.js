@@ -1,4 +1,4 @@
-function TransactionRows(props) {
+export const TransactionRows = (props) => {
   return props.transactions.map((transaction, i) => {
     const date = new Date(transaction.date);
     const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
@@ -12,6 +12,4 @@ function TransactionRows(props) {
       </tr>
     );
   });
-}
-
-export default TransactionRows;
+};

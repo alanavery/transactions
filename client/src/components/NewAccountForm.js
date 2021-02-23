@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function NewAccountForm(props) {
+export const NewAccountForm = (props) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState('');
   const [credit, setCredit] = useState(false);
@@ -53,6 +53,4 @@ function NewAccountForm(props) {
       <input type="submit" value="Submit" />
     </form>
   );
-}
-
-export default NewAccountForm;
+};

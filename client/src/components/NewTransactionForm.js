@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function NewTransactionForm(props) {
+export const NewTransactionForm = (props) => {
   const [type, setType] = useState('debit');
   const [amount, setAmount] = useState('');
   const [payee, setPayee] = useState('');
@@ -91,6 +91,4 @@ function NewTransactionForm(props) {
       <input type="submit" value="Submit" />
     </form>
   );
-}
-
-export default NewTransactionForm;
+};

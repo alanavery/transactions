@@ -1,6 +1,6 @@
-import TransactionRows from './TransactionRows';
+import { TransactionRows } from './TransactionRows';
 
-function TransactionTable(props) {
+export const TransactionTable = (props) => {
   return (
     <table className="transactions-table">
       <thead>
@@ -16,6 +16,4 @@ function TransactionTable(props) {
       </tbody>
     </table>
   );
-}
-
-export default TransactionTable;
+};

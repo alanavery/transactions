@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function NewUserForm(props) {
+export const NewUserForm = (props) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -53,6 +53,4 @@ function NewUserForm(props) {
       <input type="submit" value="Submit" />
     </form>
   );
-}
-
-export default NewUserForm;
+};

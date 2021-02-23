@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-import NewUserForm from './components/NewUserForm';
-import NewAccountForm from './components/NewAccountForm';
-import NewTransactionForm from './components/NewTransactionForm';
-import UsersList from './components/UsersList';
-import AccountsList from './components/AccountsList';
-import TransactionTable from './components/TransactionTable';
+import { NewUserForm } from './components/NewUserForm';
+import { NewAccountForm } from './components/NewAccountForm';
+import { NewTransactionForm } from './components/NewTransactionForm';
+import { UsersList } from './components/UsersList';
+import { AccountsList } from './components/AccountsList';
+import { TransactionTable } from './components/TransactionTable';
 
-function App() {
+const App = () => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [currentAccount, setCurrentAccount] = useState({});
@@ -117,6 +117,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

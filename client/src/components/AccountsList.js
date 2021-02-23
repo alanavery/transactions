@@ -1,6 +1,6 @@
 import React from 'react';
 
-function AccountsList(props) {
+export const AccountsList = (props) => {
   const listItems = props.accounts.map((account) => {
     return (
       <li key={account._id}>
@@ -17,7 +17,4 @@ function AccountsList(props) {
   return (
     <ul>{listItems}</ul>
   );
-}
-
-
-export default AccountsList;
+};
