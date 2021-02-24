@@ -1,6 +1,10 @@
-import { TransactionRows } from './TransactionRows';
+import { TransactionRow } from './TransactionRow';
 
 export const TransactionTable = (props) => {
+  const transactionRows = props.transactions.map((transaction) => {
+    return <TransactionRow transaction={transaction} key={transaction._id} />;
+  });
+
   return (
     <table className="transactions-table">
       <thead>
@@ -12,7 +16,7 @@ export const TransactionTable = (props) => {
         </tr>
       </thead>
       <tbody>
-        <TransactionRows transactions={props.transactions} />
+        {transactionRows}
       </tbody>
     </table>
   );

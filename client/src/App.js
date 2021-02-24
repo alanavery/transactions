@@ -78,6 +78,7 @@ const App = () => {
         <UsersList
           users={users}
           setCurrentUser={setCurrentUser}
+          setCurrentAccount={setCurrentAccount}
         />
 
         {currentUser._id && <div>
@@ -112,7 +113,10 @@ const App = () => {
           <p>Starting Balance: {currentAccount.balance}</p>
           <p>Cleared: {calculateBalance(true)}</p>
           <p>Uncleared: {calculateBalance(false)}</p>
-          <TransactionTable transactions={currentAccount.transactions} />
+          <TransactionTable
+            transactions={currentAccount.transactions}
+            updateUsers={updateUsers}
+          />
         </div>}
       </div>
     </div>

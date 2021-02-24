@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const blankAccountForm = {
-  name: '',
-  balance: '',
-  credit: false
-};
-
 export const NewAccountForm = (props) => {
-  const [form, setForm] = useState(blankAccountForm);
+  const [form, setForm] = useState(props.form);
 
   const handleChange = ({ target }) => {
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -18,10 +12,10 @@ export const NewAccountForm = (props) => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await axios.post(`http://localhost:8000/users/${props.currentUserId}/accounts`, form);
-      alert('Account added.');
+      const res = await axios.post(`http://localhost:8000${props.path}`, form);
+      alert(`${props.model} added.`);
       props.updateUsers();
-      setForm(blankAccountForm);
+      setForm(props.form);
     } catch (err) {
       alert(err);
     }
@@ -29,6 +23,14 @@ export const NewAccountForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {Object.entries(props.form).map(([key, value]) => {
+        return (
+          <div>
+            <label></label>
+            <input />
+          </div>
+        );
+      })}
       <label htmlFor="account-name">Name</label>
       <input
         id="account-name"
