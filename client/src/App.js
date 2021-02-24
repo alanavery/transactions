@@ -50,77 +50,44 @@ const App = () => {
     }
   };
 
-  const calculateBalance = (cleared) => {
-    let balance = currentAccount.balance;
-    let transactions;
-    if (cleared) {
-      transactions = currentAccount.transactions.filter((transaction) => transaction.cleared);
-    } else {
-      transactions = currentAccount.transactions;
-    }
-    transactions.forEach((transaction) => {
-      if (transaction.type === 'debit') {
-        balance -= transaction.amount;
-      } else if (transaction.type === 'credit') {
-        balance += transaction.amount;
-      }
-    });
-    return balance;
-  };
-
   return (
     <div className="container">
-      <div className="forms">
-        <h3>Add User</h3>
+      <div className="users">
         <NewUserForm updateUsers={updateUsers} />
 
-        <h3>Users</h3>
         <UsersList
           users={users}
           setCurrentUser={setCurrentUser}
           setCurrentAccount={setCurrentAccount}
         />
-
-        {currentUser._id && <div>
-          <h3>Add Account</h3>
-          <NewAccountForm
-            currentUserId={currentUser._id}
-            updateUsers={updateUsers}
-          />
-
-          <h3>Accounts</h3>
-          <AccountsList
-            accounts={currentUser.accounts}
-            setCurrentAccount={setCurrentAccount}
-          />
-        </div>}
-
-        {currentAccount._id && <div>
-          <h3>Add Transaction</h3>
-          <NewTransactionForm
-            currentUserId={currentUser._id}
-            currentAccountId={currentAccount._id}
-            updateUsers={updateUsers}
-            payees={payees}
-          />
-        </div>}
       </div>
 
-      <div className="account-info">
-        {currentUser._id && <h1>{currentUser.first_name}'s Account</h1>}
-        {currentAccount._id && <div>
-          <h2>{currentAccount.name}</h2>
-          <p>Starting Balance: {currentAccount.balance}</p>
-          <p>Cleared: {calculateBalance(true)}</p>
-          <p>Uncleared: {calculateBalance(false)}</p>
-          <TransactionTable
-            transactions={currentAccount.transactions}
-            currentUserId={currentUser._id}
-            currentAccountId={currentAccount._id}
-            updateUsers={updateUsers}
-          />
-        </div>}
-      </div>
+      {currentUser._id && <div className="accounts">
+        <NewAccountForm
+          currentUser={currentUser}
+          updateUsers={updateUsers}
+        />
+
+        <AccountsList
+          currentUser={currentUser}
+          setCurrentAccount={setCurrentAccount}
+        />
+      </div>}
+
+      {currentAccount._id && <div className="transactions">
+        <NewTransactionForm
+          currentUser={currentUser}
+          currentAccount={currentAccount}
+          payees={payees}
+          updateUsers={updateUsers}
+        />
+
+        <TransactionTable
+          currentUser={currentUser}
+          currentAccount={currentAccount}
+          updateUsers={updateUsers}
+        />
+      </div>}
     </div>
   );
 };

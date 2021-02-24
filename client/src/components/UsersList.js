@@ -17,6 +17,9 @@ export const UsersList = (props) => {
   });
 
   return (
-    <ul>{listItems}</ul>
+    <div>
+      <h3>Users</h3>
+      <ul>{listItems}</ul>
+    </div>
   );
 };
