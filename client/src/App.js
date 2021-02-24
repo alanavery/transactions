@@ -115,6 +115,8 @@ const App = () => {
           <p>Uncleared: {calculateBalance(false)}</p>
           <TransactionTable
             transactions={currentAccount.transactions}
+            currentUserId={currentUser._id}
+            currentAccountId={currentAccount._id}
             updateUsers={updateUsers}
           />
         </div>}

@@ -2,7 +2,13 @@ import { TransactionRow } from './TransactionRow';
 
 export const TransactionTable = (props) => {
   const transactionRows = props.transactions.map((transaction) => {
-    return <TransactionRow transaction={transaction} key={transaction._id} />;
+    return <TransactionRow
+      transaction={transaction}
+      currentUserId={props.currentUserId}
+      currentAccountId={props.currentAccountId}
+      updateUsers={props.updateUsers}
+      key={transaction._id}
+    />;
   });
 
   return (

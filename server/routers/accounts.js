@@ -21,9 +21,9 @@ accountsRouter.use('/:accountId/transactions', transactionsRouter);
 
 // Routes ——————————————————————————————
 
-accountsRouter.get('/', (req, res) => {
-  res.send(req.user.accounts);
-});
+// accountsRouter.get('/', (req, res) => {
+//   res.send(req.user.accounts);
+// });
 
 accountsRouter.post('/', (req, res) => {
   const newAccount = {
