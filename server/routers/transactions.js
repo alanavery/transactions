@@ -43,9 +43,13 @@ transactionsRouter.param('transactionId', (req, res, next, id) => {
 
 // Routes ——————————————————————————————
 
-// transactionsRouter.get('/', (req, res) => {
-//   res.send(req.account.transactions);
-// });
+transactionsRouter.get('/', (req, res) => {
+  res.send(req.account.transactions);
+});
+
+transactionsRouter.get('/:transactionId', (req, res) => {
+  res.send(req.transaction);
+});
 
 transactionsRouter.post('/', createPayee, (req, res) => {
   const newTransaction = {
@@ -66,10 +70,6 @@ transactionsRouter.post('/', createPayee, (req, res) => {
   });
 });
 
-transactionsRouter.get('/:transactionId', (req, res) => {
-  res.send(req.transaction);
-});
-
 transactionsRouter.put('/:transactionId', (req, res) => {
   req.user.accounts.id(req.account._id).transactions.id(req.transaction._id).cleared = req.body.cleared;
   req.user.save((err, updatedUser) => {
@@ -77,7 +77,7 @@ transactionsRouter.put('/:transactionId', (req, res) => {
       console.log(err);
       res.status(500).send(err);
     } else {
-      res.status(200).send(updatedUser);
+      res.send(updatedUser);
     }
   });
 });

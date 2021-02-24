@@ -5,9 +5,17 @@ import './App.css';
 import { NewUserForm } from './components/NewUserForm';
 import { NewAccountForm } from './components/NewAccountForm';
 import { NewTransactionForm } from './components/NewTransactionForm';
+import { EditUserForm } from './components/EditUserForm';
+import { DeleteUserForm } from './components/DeleteUserForm';
 import { UsersList } from './components/UsersList';
 import { AccountsList } from './components/AccountsList';
 import { TransactionTable } from './components/TransactionTable';
+
+const userForm = {
+  firstName: '',
+  lastName: '',
+  email: ''
+};
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -21,14 +29,22 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser._id) {
-      setCurrentUser(users.find((user) => user._id === currentUser._id));
+    const user = users.find((user) => user._id === currentUser._id);
+    if (user) {
+      setCurrentUser(user);
+    } else {
+      setCurrentUser({});
     }
   }, [users]);
 
   useEffect(() => {
-    if (currentAccount._id) {
-      setCurrentAccount(currentUser.accounts.find((account) => account._id === currentAccount._id));
+    if (currentUser._id) {
+      const account = currentUser.accounts.find((account) => account._id === currentAccount._id);
+      if (account) {
+        setCurrentAccount(account);
+      } else {
+        setCurrentAccount({});
+      }
     }
   }, [currentUser]);
 
@@ -53,7 +69,10 @@ const App = () => {
   return (
     <div className="container">
       <div className="users">
-        <NewUserForm updateUsers={updateUsers} />
+        <NewUserForm
+          userForm={userForm}
+          updateUsers={updateUsers}
+        />
 
         <UsersList
           users={users}
@@ -63,6 +82,17 @@ const App = () => {
       </div>
 
       {currentUser._id && <div className="accounts">
+        <EditUserForm
+          userForm={userForm}
+          currentUser={currentUser}
+          updateUsers={updateUsers}
+        />
+
+        <DeleteUserForm
+          currentUser={currentUser}
+          updateUsers={updateUsers}
+        />
+
         <NewAccountForm
           currentUser={currentUser}
           updateUsers={updateUsers}

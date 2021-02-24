@@ -44,6 +44,22 @@ usersRouter.get('/', (req, res) => {
   });
 });
 
+usersRouter.get('/:userId', (req, res) => {
+  User.findById(req.user._id).populate({
+    path: 'accounts',
+    populate: {
+      path: 'transactions',
+      populate: { path: 'payee' }
+    }
+  }).exec((err, user) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(user);
+    }
+  });
+});
+
 usersRouter.post('/', (req, res) => {
   const newUser = new User({
     first_name: req.body.firstName,
@@ -55,6 +71,29 @@ usersRouter.post('/', (req, res) => {
       res.status(500).send(err);
     } else {
       res.status(201).send(createdUser);
+    }
+  });
+});
+
+usersRouter.put('/:userId', (req, res) => {
+  req.user.first_name = req.body.firstName;
+  req.user.last_name = req.body.lastName;
+  req.user.email = req.body.email;
+  req.user.save((err, updatedUser) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(updatedUser);
+    }
+  });
+});
+
+usersRouter.delete('/:userId', (req, res) => {
+  User.deleteOne({ _id: req.user._id }, (err) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(204).send();
     }
   });
 });

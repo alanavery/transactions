@@ -7,7 +7,6 @@ export const UsersList = (props) => {
           onClick={(event) => {
             event.preventDefault();
             props.setCurrentUser(user);
-            props.setCurrentAccount({});
           }}
         >
           {user.first_name} {user.last_name}

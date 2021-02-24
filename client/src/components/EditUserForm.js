@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export const NewUserForm = (props) => {
+export const EditUserForm = (props) => {
   const [form, setForm] = useState(props.userForm);
+
+  useEffect(() => {
+    setForm({
+      firstName: props.currentUser.first_name,
+      lastName: props.currentUser.last_name,
+      email: props.currentUser.email
+    });
+  }, [props.currentUser]);
 
   const handleChange = ({ target }) => {
     setForm((current) => ({ ...current, [target.name]: target.value }));
@@ -11,40 +19,40 @@ export const NewUserForm = (props) => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await axios.post('http://localhost:8000/users', form);
-      alert('User added.');
+      const res = await axios.put(`http://localhost:8000/users/${props.currentUser._id}`, form);
+      alert('User edited.');
       props.updateUsers();
-      setForm(props.userForm);
     } catch (err) {
       alert(err);
+      props.updateUsers();
     }
   };
 
   return (
     <div>
-      <h3>Add User</h3>
+      <h3>Edit User</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="user-first-name">First Name</label>
+        <label htmlFor="edit-user-first-name">First Name</label>
         <input
-          id="user-first-name"
+          id="edit-user-first-name"
           name="firstName"
           type="text"
           value={form.firstName}
           onChange={handleChange}
         />
 
-        <label htmlFor="user-last-name">Last Name</label>
+        <label htmlFor="edit-user-last-name">Last Name</label>
         <input
-          id="user-last-name"
+          id="edit-user-last-name"
           name="lastName"
           type="text"
           value={form.lastName}
           onChange={handleChange}
         />
 
-        <label htmlFor="user-email">Email</label>
+        <label htmlFor="edit-user-email">Email</label>
         <input
-          id="user-email"
+          id="edit-user-email"
           name="email"
           type="email"
           value={form.email}
