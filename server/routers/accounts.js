@@ -25,6 +25,10 @@ accountsRouter.get('/', (req, res) => {
   res.send(req.user.accounts);
 });
 
+accountsRouter.get('/:accountId', (req, res) => {
+  res.send(req.account);
+});
+
 accountsRouter.post('/', (req, res) => {
   const newAccount = {
     name: req.body.name,
@@ -38,6 +42,18 @@ accountsRouter.post('/', (req, res) => {
       res.status(500).send(err);
     } else {
       res.status(201).send(updatedUser);
+    }
+  });
+});
+
+accountsRouter.delete('/:accountId', (req, res) => {
+  req.user.accounts.id(req.account._id).remove();
+  req.user.save((err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      res.status(204).send();
     }
   });
 });

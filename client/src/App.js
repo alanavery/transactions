@@ -7,6 +7,7 @@ import { NewAccountForm } from './components/NewAccountForm';
 import { NewTransactionForm } from './components/NewTransactionForm';
 import { EditUserForm } from './components/EditUserForm';
 import { DeleteUserForm } from './components/DeleteUserForm';
+import { DeleteAccountForm } from './components/DeleteAccountForm';
 import { UsersList } from './components/UsersList';
 import { AccountsList } from './components/AccountsList';
 import { TransactionTable } from './components/TransactionTable';
@@ -105,6 +106,12 @@ const App = () => {
       </div>}
 
       {currentAccount._id && <div className="transactions">
+        <DeleteAccountForm
+          currentUser={currentUser}
+          currentAccount={currentAccount}
+          updateUsers={updateUsers}
+        />
+
         <NewTransactionForm
           currentUser={currentUser}
           currentAccount={currentAccount}
