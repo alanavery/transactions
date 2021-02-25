@@ -14,7 +14,26 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr 2fr;
+  column-gap: 5vw;
+}
+
+.form,
+.list {
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  background-color: rgb(200, 200, 200);
+  overflow: auto;
+}
+
+.list {
+  background-color: rgb(220, 220, 220);
+}
+
+.edit-delete-forms {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 0.5rem;
 }
 
 input {

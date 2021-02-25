@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 export const NewUserForm = (props) => {
+  const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(props.userForm);
 
   const handleChange = ({ target }) => {
@@ -14,16 +15,22 @@ export const NewUserForm = (props) => {
       const res = await axios.post('http://localhost:8000/users', form);
       alert('User added.');
       props.updateUsers();
+      setShowForm(false);
       setForm(props.userForm);
     } catch (err) {
       alert(err);
     }
   };
 
+  const toggleForm = () => {
+    setShowForm(!showForm ? true : false);
+  };
+
   return (
-    <div>
-      <h3>Add User</h3>
-      <form onSubmit={handleSubmit}>
+    <div className="form">
+      <button onClick={toggleForm}>{!showForm ? 'Add User' : 'Cancel'}</button>
+
+      {showForm && <form onSubmit={handleSubmit}>
         <label htmlFor="user-first-name">First Name</label>
         <input
           id="user-first-name"
@@ -52,7 +59,7 @@ export const NewUserForm = (props) => {
         />
 
         <input type="submit" value="Submit" />
-      </form>
+      </form>}
     </div>
   );
 };

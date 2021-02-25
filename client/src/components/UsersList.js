@@ -1,5 +1,5 @@
 export const UsersList = (props) => {
-  const listItems = props.users.map((user) => {
+  const renderList = props.users.map((user) => {
     return (
       <li key={user._id}>
         <a
@@ -16,9 +16,9 @@ export const UsersList = (props) => {
   });
 
   return (
-    <div>
+    <div className="list">
       <h3>Users</h3>
-      <ul>{listItems}</ul>
+      <ul>{renderList}</ul>
     </div>
   );
 };

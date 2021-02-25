@@ -76,7 +76,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <div className="users">
+      <div>
         <NewUserForm
           userForm={userForm}
           updateUsers={updateUsers}
@@ -87,53 +87,59 @@ const App = () => {
           setCurrentUser={setCurrentUser}
           setCurrentAccount={setCurrentAccount}
         />
+
+        {currentUser._id && <div>
+          <div className="edit-delete-forms">
+            <EditUserForm
+              userForm={userForm}
+              currentUser={currentUser}
+              updateUsers={updateUsers}
+            />
+
+            <DeleteUserForm
+              currentUser={currentUser}
+              updateUsers={updateUsers}
+            />
+          </div>
+
+          <NewAccountForm
+            accountForm={accountForm}
+            currentUser={currentUser}
+            updateUsers={updateUsers}
+          />
+
+          <AccountsList
+            currentUser={currentUser}
+            setCurrentAccount={setCurrentAccount}
+          />
+        </div>}
+
+        {currentAccount._id && <div className="edit-delete-forms">
+          <EditAccountForm
+            accountForm={accountForm}
+            currentUser={currentUser}
+            currentAccount={currentAccount}
+            updateUsers={updateUsers}
+          />
+
+          <DeleteAccountForm
+            currentUser={currentUser}
+            currentAccount={currentAccount}
+            updateUsers={updateUsers}
+          />
+        </div>}
       </div>
 
-      {currentUser._id && <div className="accounts">
-        <EditUserForm
-          userForm={userForm}
-          currentUser={currentUser}
-          updateUsers={updateUsers}
-        />
-
-        <DeleteUserForm
-          currentUser={currentUser}
-          updateUsers={updateUsers}
-        />
-
-        <NewAccountForm
-          accountForm={accountForm}
-          currentUser={currentUser}
-          updateUsers={updateUsers}
-        />
-
-        <AccountsList
-          currentUser={currentUser}
-          setCurrentAccount={setCurrentAccount}
-        />
-      </div>}
-
-      {currentAccount._id && <div className="transactions">
-        <EditAccountForm
-          accountForm={accountForm}
-          currentUser={currentUser}
-          currentAccount={currentAccount}
-          updateUsers={updateUsers}
-        />
-
-        <DeleteAccountForm
-          currentUser={currentUser}
-          currentAccount={currentAccount}
-          updateUsers={updateUsers}
-        />
-
+      {currentAccount._id && <div>
         <NewTransactionForm
           currentUser={currentUser}
           currentAccount={currentAccount}
           payees={payees}
           updateUsers={updateUsers}
         />
+      </div>}
 
+      {currentAccount._id && <div>
         <TransactionTable
           currentUser={currentUser}
           currentAccount={currentAccount}

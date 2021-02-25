@@ -31,7 +31,7 @@ export const TransactionTable = (props) => {
 
   return (
     <div>
-      <h3>{props.currentAccount.name}</h3>
+      <h1>{props.currentAccount.name}</h1>
       <p>Starting Balance: {props.currentAccount.balance}</p>
       <p>Cleared: {calculateBalance(true)}</p>
       <p>Uncleared: {calculateBalance(false)}</p>

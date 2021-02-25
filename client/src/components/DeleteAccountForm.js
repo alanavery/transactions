@@ -1,43 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 export const DeleteAccountForm = (props) => {
-  const [confirm, setConfirm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => setConfirm(false), [props.currentAccount]);
-
-  const renderDeleteForm = () => {
-    if (!confirm) {
-      return <button onClick={toggleConfirm}>Delete</button>;
-    } else {
-      return (
-        <div>
-          <p>Are you sure?</p>
-          <button onClick={deleteAccount}>Yes</button>
-          <button onClick={toggleConfirm}>No</button>
-        </div>
-      );
-    }
-  };
-
-  const toggleConfirm = () => {
-    setConfirm(!confirm ? true : false);
-  };
-
-  const deleteAccount = async () => {
+  const handleClick = async () => {
     try {
       const res = await axios.delete(`http://localhost:8000/users/${props.currentUser._id}/accounts/${props.currentAccount._id}`);
       alert('Account deleted.');
       props.updateUsers();
+      setShowForm(false);
     } catch (err) {
       alert(err);
     }
   };
 
+  const toggleForm = () => {
+    setShowForm(!showForm ? true : false);
+  };
+
   return (
-    <div>
-      <h3>Delete Account</h3>
-      {renderDeleteForm()}
+    <div className="form">
+      <button onClick={toggleForm}>{!showForm ? 'Delete Account' : 'Cancel'}</button>
+
+      {showForm && <div>
+        <p>Are you sure?</p>
+        <button onClick={handleClick}>Yes</button>
+      </div>}
     </div>
   );
 };

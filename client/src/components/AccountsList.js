@@ -1,5 +1,5 @@
 export const AccountsList = (props) => {
-  const listItems = props.currentUser.accounts.map((account) => {
+  const renderList = props.currentUser.accounts.map((account) => {
     return (
       <li key={account._id}>
         <a
@@ -16,9 +16,9 @@ export const AccountsList = (props) => {
   });
 
   return (
-    <div>
+    <div className="list">
       <h3>{props.currentUser.first_name}'s Accounts</h3>
-      <ul>{listItems}</ul>
+      <ul>{renderList}</ul>
     </div>
   );
 };

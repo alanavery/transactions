@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const EditAccountForm = (props) => {
+  const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(props.accountForm);
 
   useEffect(() => {
@@ -23,16 +24,22 @@ export const EditAccountForm = (props) => {
       const res = await axios.put(`http://localhost:8000/users/${props.currentUser._id}/accounts/${props.currentAccount._id}`, form);
       alert('Account edited.');
       props.updateUsers();
+      setShowForm(false);
     } catch (err) {
       alert(err);
       props.updateUsers();
     }
   };
 
+  const toggleForm = () => {
+    setShowForm(!showForm ? true : false);
+  };
+
   return (
-    <div>
-      <h3>Edit Account</h3>
-      <form onSubmit={handleSubmit}>
+    <div className="form">
+      <button onClick={toggleForm}>{!showForm ? 'Edit Account' : 'Cancel'}</button>
+
+      {showForm && <form onSubmit={handleSubmit}>
         <label htmlFor="edit-account-name">Name</label>
         <input
           id="edit-account-name"
@@ -61,7 +68,7 @@ export const EditAccountForm = (props) => {
         />
 
         <input type="submit" value="Submit" />
-      </form>
+      </form>}
     </div>
   );
 };
