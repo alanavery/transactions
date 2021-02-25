@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export const NewAccountForm = (props) => {
+export const EditAccountForm = (props) => {
   const [form, setForm] = useState(props.accountForm);
+
+  useEffect(() => {
+    setForm({
+      name: props.currentAccount.name,
+      balance: props.currentAccount.balance,
+      credit: props.currentAccount.credit
+    });
+  }, [props.currentAccount]);
 
   const handleChange = ({ target }) => {
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -12,40 +20,40 @@ export const NewAccountForm = (props) => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await axios.post(`http://localhost:8000/users/${props.currentUser._id}/accounts`, form);
-      alert('Account added.');
+      const res = await axios.put(`http://localhost:8000/users/${props.currentUser._id}/accounts/${props.currentAccount._id}`, form);
+      alert('Account edited.');
       props.updateUsers();
-      setForm(props.accountForm);
     } catch (err) {
       alert(err);
+      props.updateUsers();
     }
   };
 
   return (
     <div>
-      <h3>Add Account</h3>
+      <h3>Edit Account</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="account-name">Name</label>
+        <label htmlFor="edit-account-name">Name</label>
         <input
-          id="account-name"
+          id="edit-account-name"
           name="name"
           type="text"
           value={form.name}
           onChange={handleChange}
         />
 
-        <label htmlFor="account-balance">Balance</label>
+        <label htmlFor="edit-account-balance">Balance</label>
         <input
-          id="account-balance"
+          id="edit-account-balance"
           name="balance"
           type="number"
           value={form.balance}
           onChange={handleChange}
         />
 
-        <label htmlFor="account-credit">Credit</label>
+        <label htmlFor="edit-account-credit">Credit</label>
         <input
-          id="account-credit"
+          id="edit-account-credit"
           name="credit"
           type="checkbox"
           checked={form.credit}

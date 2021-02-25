@@ -6,6 +6,7 @@ import { NewUserForm } from './components/NewUserForm';
 import { NewAccountForm } from './components/NewAccountForm';
 import { NewTransactionForm } from './components/NewTransactionForm';
 import { EditUserForm } from './components/EditUserForm';
+import { EditAccountForm } from './components/EditAccountForm';
 import { DeleteUserForm } from './components/DeleteUserForm';
 import { DeleteAccountForm } from './components/DeleteAccountForm';
 import { UsersList } from './components/UsersList';
@@ -16,6 +17,12 @@ const userForm = {
   firstName: '',
   lastName: '',
   email: ''
+};
+
+const accountForm = {
+  name: '',
+  balance: '',
+  credit: false
 };
 
 const App = () => {
@@ -95,6 +102,7 @@ const App = () => {
         />
 
         <NewAccountForm
+          accountForm={accountForm}
           currentUser={currentUser}
           updateUsers={updateUsers}
         />
@@ -106,6 +114,13 @@ const App = () => {
       </div>}
 
       {currentAccount._id && <div className="transactions">
+        <EditAccountForm
+          accountForm={accountForm}
+          currentUser={currentUser}
+          currentAccount={currentAccount}
+          updateUsers={updateUsers}
+        />
+
         <DeleteAccountForm
           currentUser={currentUser}
           currentAccount={currentAccount}

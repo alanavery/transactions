@@ -46,6 +46,20 @@ accountsRouter.post('/', (req, res) => {
   });
 });
 
+accountsRouter.put('/:accountId', (req, res) => {
+  const account = req.user.accounts.id(req.account._id);
+  account.name = req.body.name;
+  account.balance = req.body.balance;
+  account.credit = req.body.credit;
+  req.user.save((err, updatedUser) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(updatedUser);
+    }
+  });
+});
+
 accountsRouter.delete('/:accountId', (req, res) => {
   req.user.accounts.id(req.account._id).remove();
   req.user.save((err) => {

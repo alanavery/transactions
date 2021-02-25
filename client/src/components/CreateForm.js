@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export const NewAccountForm = (props) => {
+export const CreateForm = (props) => {
   const [form, setForm] = useState(props.form);
 
   const handleChange = ({ target }) => {
@@ -19,6 +19,40 @@ export const NewAccountForm = (props) => {
     } catch (err) {
       alert(err);
     }
+  };
+
+  const renderInput = (field) => {
+    if (field.type === 'checkbox') {
+      return <input
+        id="text"
+      />;
+    }
+  };
+
+  const renderFormFields = () => {
+    for (const field in props.form) {
+      const id = `create-${props.model.toLowerCase()}-${props.form[field].id}`;
+
+      return (
+        <div>
+          <label htmlFor={id}></label>
+          <input
+            id={id}
+            name={field}
+            type={props.form[field].type}
+            {props.form[field].type === 'checkbox' ? 'checked' : 'value'}
+          />
+        </div>
+      );
+    });
+    // Object.entries(props.form).map(([key, value]) => {
+    //   return (
+    //     <div>
+    //       <label htmlFor=""></label>
+    //       <input type="text"/>
+    //     </div>
+    //   )
+    // });
   };
 
   return (

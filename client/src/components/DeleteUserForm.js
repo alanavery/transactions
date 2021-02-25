@@ -4,9 +4,7 @@ import axios from 'axios';
 export const DeleteUserForm = (props) => {
   const [confirm, setConfirm] = useState(false);
 
-  useEffect(() => {
-    setConfirm(false);
-  }, [props.currentUser]);
+  useEffect(() => setConfirm(false), [props.currentUser]);
 
   const renderDeleteForm = () => {
     if (!confirm) {
