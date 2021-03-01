@@ -1,16 +1,6 @@
 import { TransactionRow } from './TransactionRow';
 
 export const TransactionTable = (props) => {
-  const transactionRows = props.currentAccount.transactions.map((transaction) => {
-    return <TransactionRow
-      transaction={transaction}
-      currentUserId={props.currentUser._id}
-      currentAccountId={props.currentAccount._id}
-      updateUsers={props.updateUsers}
-      key={transaction._id}
-    />;
-  });
-
   const calculateBalance = (cleared) => {
     let balance = props.currentAccount.balance;
     let transactions;
@@ -29,6 +19,18 @@ export const TransactionTable = (props) => {
     return balance;
   };
 
+  const renderTableBody = () => {
+    return props.currentAccount.transactions.map((transaction) => {
+      return <TransactionRow
+        transaction={transaction}
+        currentUserId={props.currentUser._id}
+        currentAccountId={props.currentAccount._id}
+        updateUsers={props.updateUsers}
+        key={transaction._id}
+      />;
+    });
+  };
+
   return (
     <div>
       <h1>{props.currentAccount.name}</h1>
@@ -42,10 +44,11 @@ export const TransactionTable = (props) => {
             <th>Payee/Payer</th>
             <th>Date</th>
             <th>Cleared</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {transactionRows}
+          {renderTableBody()}
         </tbody>
       </table>
     </div>

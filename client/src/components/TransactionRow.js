@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
+import { DeleteTransactionForm } from './DeleteTransactionForm';
+
 export const TransactionRow = (props) => {
   const [cleared, setCleared] = useState(props.transaction.cleared);
 
@@ -36,6 +38,14 @@ export const TransactionRow = (props) => {
           type="checkbox"
           checked={cleared}
           onChange={handleChange}
+        />
+      </td>
+      <td>
+        <DeleteTransactionForm
+          transaction={props.transaction}
+          currentUserId={props.currentUserId}
+          currentAccountId={props.currentAccountId}
+          updateUsers={props.updateUsers}
         />
       </td>
     </tr>

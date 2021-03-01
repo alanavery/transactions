@@ -71,13 +71,26 @@ transactionsRouter.post('/', createPayee, (req, res) => {
 });
 
 transactionsRouter.put('/:transactionId', (req, res) => {
-  req.user.accounts.id(req.account._id).transactions.id(req.transaction._id).cleared = req.body.cleared;
+  const transaction = req.user.accounts.id(req.account._id).transactions.id(req.transaction._id);
+  transaction.cleared = req.body.cleared;
   req.user.save((err, updatedUser) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
     } else {
       res.send(updatedUser);
+    }
+  });
+});
+
+transactionsRouter.delete('/:transactionId', (req, res) => {
+  req.user.accounts.id(req.account._id).transactions.id(req.transaction._id).remove();
+  req.user.save((err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      res.status(204).send();
     }
   });
 });
