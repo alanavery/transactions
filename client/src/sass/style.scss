@@ -1,7 +1,38 @@
+// Variables
+$color-light-gray: #eee;
+$color-red: #ff0000;
+
+$color-text-dark: #000;
+$color-text-medium: #555;
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+a {
+  text-decoration: none;
+
+  &:link {
+    color: $color-text-dark;
+  }
+
+  &:visited {
+    color: $color-text-medium;
+  }
+
+  &:focus {
+    background-color: $color-light-gray;
+  }
+
+  &:hover {
+    background-color: $color-light-gray;
+  }
+
+  &:active {
+    color: $color-red;
+  }
 }
 
 ul {
