@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css';
+import './dist/style.css';
 
 import { NewUserForm } from './components/NewUserForm';
 import { NewAccountForm } from './components/NewAccountForm';
